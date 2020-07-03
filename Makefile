@@ -2,7 +2,6 @@ machine-url = https://ops.zingle.me/public/machine
 
 build = build
 src = src
-portables = portables
 
 portables = php-fpm
 portable-images = $(patsubst %,$(build)/%.tgz,$(portables))
@@ -16,7 +15,7 @@ system-reinstalls = $(patsubst %,reinstall-%,$(systems))
 
 default: build
 
-build: $(build)/eoan.tgz
+build: $(portables)
 
 clean:
 	rm -rf $(build)
