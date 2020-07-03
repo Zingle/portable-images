@@ -1,0 +1,16 @@
+#!/bin/bash -e
+
+declare root=$1
+
+test -e "$root" || mkdir -p "$root"
+cd "$root"
+mkdir -p etc proc sys dev run tmp var/tmp
+mkdir -p usr/bin usr/lib/systemd/system usr/lib64 usr/sbin
+mkdir -p usr/lib usr/lib64
+
+ln -nsf usr/bin
+ln -nsf usr/lib
+ln -nsf usr/lib64
+ln -nsf usr/sbin
+
+touch etc/resolv.conf etc/machine-id

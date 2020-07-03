@@ -1,0 +1,40 @@
+#!/bin/bash -e
+
+declare root=$1
+declare bin=$2
+declare lib64=/usr/lib/x86_64-linux-gnu
+declare data lib
+declare -a libs files
+
+cd "$root"
+data=$(ldd "$bin")
+readarray -t libs <<< "$data"
+
+mkdir -p lib64 ${lib64:1}
+
+for data in "${libs[@]}"; do
+    data=$(echo $data)
+    lib=$(cut -f1 -d " " <<< "$data")
+
+    if test "$lib" = linux-vdso.so.1; then
+        continue
+    elif test "${lib:0:1}" = /; then
+        if test -e ".$lib"; then
+            echo skipping $lib which already exists
+        else
+            echo copying $lib to portable service
+            cp $lib ".$lib"
+        fi
+    else
+        if test -e ".$lib64/$lib"; then
+            echo skipping $lib which already exists
+        else
+            echo copying $lib64/$lib to portable service
+            cp $lib64/$lib ".$lib64/$lib"
+        fi
+    fi
+done
+
+for data in "${files[@]}"; do
+    echo $data
+done
