@@ -1,0 +1,4 @@
+NAME="Nginx"
+VERSION=1.16.1
+ID=nginx
+PRETTY_NAME="Nginx v1.16.1"

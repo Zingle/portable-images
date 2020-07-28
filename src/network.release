@@ -1,0 +1,4 @@
+NAME="Network Tools"
+VERSION=POC
+ID=network
+PRETTY_NAME="Network Tools POC"
