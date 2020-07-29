@@ -145,6 +145,9 @@ $(build)/php-fpm: $(build)/eoan $(src)/php-fpm.release Makefile
 		-e 's/^;pcre.jit=.*$$/pcre.jit=0/' \
 		$@/etc/php/current/fpm/php.ini
 	sed -i \
+		-e 's/^;pcre.jit=.*$$/pcre.jit=0/' \
+		$@/etc/php/current/cli/php.ini
+	sed -i \
 		-e /^user/d \
 		-e /^group/d \
 		-e 's/^;clear_env = no/clear_env = no/' \
