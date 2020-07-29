@@ -119,7 +119,7 @@ $(build)/php-fpm: $(build)/eoan $(src)/php-fpm.release Makefile
 	@sleep 3
 	machinectl shell portable-build /usr/bin/apt-get -y install --reinstall \
 		php-fpm php-bcmath php-bz2 php-curl php-mbstring php-mysql php-pgsql php-soap php-xml \
-		bash coreutils debianutils jq less sed \
+		bash coreutils debianutils jq less sed tzdata \
 		libattr1 libacl1 libc6 libnss3 libselinux1
 	machinectl stop portable-build
 	@sleep 3
