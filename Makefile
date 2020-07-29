@@ -67,6 +67,7 @@ $(build)/dig: $(build)/eoan $(src)/dig.release Makefile
 	machinectl stop portable-build
 	@sleep 3
 	sudo chown -R $(shell whoami):$(shell whoami) $@
+	find $@/etc -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 	touch $@/etc/machine-id
 	echo nameserver 127.0.0.53 >> $@/etc/resolv.conf
 	echo options edns0 >> $@/etc/resolv.conf
@@ -78,13 +79,10 @@ $(build)/curl: $(build)/eoan $(src)/curl.release Makefile
 	$(eval pwd := $(shell pwd))
 	mkdir $@
 	wget -qO- $(portable-url)/dig.tgz | tar xz -C $@
-	rm -fr $@/etc/*
+	wget -qO- $(portable-url)/ca.tgz | tar xz -C $@
 	sudo systemd-nspawn -qbPD $< -M portable-build --overlay=$(pwd)/$</etc:$(pwd)/$@/etc:/etc --overlay=$(pwd)/$</usr:$(pwd)/$@/usr:/usr &
 	@sleep 3
 	machinectl shell portable-build /usr/bin/apt-get -y install --reinstall curl libnghttp2-14 librtmp1 libssh-4 libpsl5 libldap-2.4-2 libgnutls30 libhogweed4 libnettle6 libgmp10 libsasl2-2 libgssapi3-heimdal libp11-kit0 libtasn1-6 libheimntlm0-heimdal libkrb5-26-heimdal libasn1-8-heimdal libhcrypto4-heimdal libroken18-heimdal libffi6 libwind0-heimdal libheimbase1-heimdal libhx509-5-heimdal libsqlite3-0
-	machinectl shell portable-build /usr/bin/apt-get -y install --reinstall ca-certificates dash debconf
-	machinectl shell portable-build /usr/sbin/dpkg-reconfigure ca-certificates
-	machinectl shell portable-build /usr/sbin/update-ca-certificates
 	machinectl stop portable-build
 	@sleep 3
 	sudo chown -R $(shell whoami):$(shell whoami) $@
