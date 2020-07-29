@@ -1,0 +1,4 @@
+NAME="Proof of Concept"
+VERSION=POC
+ID=poc
+PRETTY_NAME="POC/debug"

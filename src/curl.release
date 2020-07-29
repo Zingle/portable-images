@@ -1,0 +1,4 @@
+NAME=Curl
+VERSION=7.65.3
+ID=curl
+PRETTY_NAME="Curl 7.65.3"

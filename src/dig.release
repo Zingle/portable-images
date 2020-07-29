@@ -1,0 +1,4 @@
+NAME="DiG"
+VERSION=9.11.5
+ID=dig
+PRETTY_NAME="DiG 9.11.5"
