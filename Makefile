@@ -86,6 +86,7 @@ $(build)/curl: $(build)/eoan $(src)/curl.release Makefile
 	machinectl stop portable-build
 	@sleep 3
 	sudo chown -R $(shell whoami):$(shell whoami) $@
+	find $@/etc -mindepth 1 -maxdepth 1 ! -name ssl -exec rm -rf {} +
 	touch $@/etc/machine-id
 	echo nameserver 127.0.0.53 >> $@/etc/resolv.conf
 	echo options edns0 >> $@/etc/resolv.conf
