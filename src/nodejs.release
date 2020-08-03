@@ -1,0 +1,4 @@
+NAME="Nodejs"
+VERSION=10.15.2
+ID=nodejs
+PRETTY_NAME="Nodejs v10.15.2"

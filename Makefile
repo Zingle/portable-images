@@ -6,7 +6,7 @@ publish-path = /usr/share/zingle/ops/public/portable
 build = build
 src = src
 
-portables = php-fpm nginx network dig curl ca
+portables = dig ca curl network nginx nodejs php-fpm
 portable-images = $(patsubst %,$(build)/%.tgz,$(portables))
 portable-folders = $(patsubst %,$(build)/%,$(portables))
 portable-cleans = $(patsubst %,clean-%,$(portables))
@@ -109,6 +109,25 @@ $(build)/nginx: $(build)/eoan $(src)/nginx.release Makefile
 	touch $@/etc/resolv.conf $@/etc/machine-id
 	cp $(src)/nginx.release $@/etc/os-release
 	touch $@
+
+$(build)/nodejs: $(build)/eoan $(src)/nodejs.release Makefile
+	$(eval pwd := $(shell pwd))
+	bin/mkproot $@
+	rm -fr $@/etc/*
+	wget -qO- $(portable-url)/curl.tgz | tar xz -C $@
+	sudo systemd-nspawn -qbPD $< -M portable-build --overlay=$(pwd)/$</etc:$(pwd)/$@/etc:/etc --overlay=$(pwd)/$</usr:$(pwd)/$@/usr:/usr &
+	@sleep 3
+	machinectl shell portable-build /usr/bin/apt-get -y install --reinstall \
+		nodejs \
+		libc6 libnode64
+	machinectl stop portable-build
+	@sleep 3
+	sudo chown -R $(shell whoami):$(shell whoami) $@
+	find $@/etc -mindepth 1 -maxdepth 1 ! -name ssl -exec rm -rf {} +
+	touch $@/etc/resolv.conf $@/etc/machine-id
+	cp $(src)/nodejs.release $@/etc/os-release
+	touch $@
+	sudo make uninstall-eoan
 
 $(build)/php-fpm: $(build)/eoan $(src)/php-fpm.release Makefile
 	$(eval pwd := $(shell pwd))
